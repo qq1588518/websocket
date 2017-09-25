@@ -51,42 +51,33 @@ class App extends Component {
     }
   }
   componentDidMount(){
+    let _this = this;
     socket.on('globalMsg', function (data) {
-      addContent(data);
-    });
-    socket.on('connect success', function (data) {
-      connectSuccess();
-    });
-    socket.on('username', function (userName) {
-      setUserName(userName);
-    });
-    socket.on("globalConnect", function (connMsg) {
-      addConnect(connMsg);
-    });
-    socket.on('globalDisconnect', function(closeMsg) {
-      addConnect(closeMsg);
-    });
-    let addConnect = (connMsg)=>{
-      this.setState({
-        msgContent:this.state.msgContent+connMsg+'\n'
-      });
-    }
-    let setUserName = (userName)=>{
-      this.setState({
-        userName:userName,
-      });
-    }
-    let addContent = (data)=>{
-      this.setState({
-        msgContent:this.state.msgContent+
+      _this.setState({
+        msgContent:_this.state.msgContent+
         data.userName+"说："+data.msg+'\n'
       });
-    }
-    let connectSuccess = ()=>{
-      this.setState({
+    });
+    socket.on('connect success', function (data) {
+      _this.setState({
         connect:true
       });
-    }
+    });
+    socket.on('username', function (userName) {
+      _this.setState({
+        userName:userName,
+      });
+    });
+    socket.on("globalConnect", function (connMsg) {
+      _this.setState({
+        msgContent:_this.state.msgContent+connMsg+'\n'
+      });
+    });
+    socket.on('globalDisconnect', function(closeMsg) {
+      _this.setState({
+        msgContent:_this.state.msgContent+closeMsg+'\n'
+      });
+    });
   }
   InputFocus = (e)=>{
     e.target.value==="请输入文字消息" && this.setState({msgInput:""});
